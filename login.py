@@ -10,12 +10,14 @@ training purposes only!
 
 
 import csv
+from tabnanny import check
+
 from config import display
 from flask import Flask, render_template, request, url_for, flash, redirect
 from db import Db
 from lessons import sql_injection
 from lessons.password_crack import hash_pw, authenticate
-from users_db import search_db, get_id, add_user
+from users_db import search_db, get_id, add_user, check_locked, lock
 from new_user import check_exist, password_strength
 
 app = Flask(__name__, static_folder='instance/static')
@@ -55,22 +57,26 @@ def transactions():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """Login the user. """
+    """ TODO: fix attempt counts"""
     attempt_count = 0
 
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        if check_locked(username) == True:
+            return render_template('locked.html',
+                                   title="Secure Login",
+                                   heading="Secure Login")
+
         attempt_count += 1
 
         if search_db(username, password):
             return redirect(url_for('login_success',
                                              id_=get_id(username)))
         else:
-            flash("Invalid username or password!", 'alert-danger')
+            flash("Invalid username or password!" + str(attempt_count), 'alert-danger')
             if attempt_count > 2:
-                return render_template('locked.html',
-                                       title="Secure Login",
-                                       heading="Secure Login")
+                lock(username)
     return render_template('login.html',
                            title="Secure Login",
                            heading="Secure Login")

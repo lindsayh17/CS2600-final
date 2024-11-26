@@ -21,7 +21,8 @@ def create_db():
                     username text,
                     date_joined text,
                     password text,
-                    access_level character
+                    access_level character,
+                    attempts int
                     )''')
         conn.commit()
         return True
@@ -56,11 +57,42 @@ def get_id(username):
         if conn is not None:
             conn.close()
 
+def check_locked(username):
+    try:
+        conn = sqlite3.connect('instance/var/db/users.db')
+        c = conn.cursor()
+        user_info = c.execute('SELECT locked FROM users WHERE username == ?', (username, )).fetchone()
+        if user_info:
+            return user_info[0]
+        else:
+            return False
+    except sqlite3.DatabaseError:
+        return "Error. Could not retrieve user information."
+    finally:
+        if c is not None:
+            c.close()
+        if conn is not None:
+            conn.close()
+
+def lock(username):
+    try:
+        conn = sqlite3.connect('instance/var/db/users.db')
+        c = conn.cursor()
+        c.executemany('UPDATE users SET locked = TRUE WHERE username == ?', (username, ))
+        conn.commit()
+        return True
+    except sqlite3.DatabaseError:
+        return "Error. Could not retrieve user information."
+    finally:
+        if c is not None:
+            c.close()
+        if conn is not None:
+            conn.close()
 
 def add_user(username, password, access_level):
     """ Example data insert into plants table """
     date_joined = str(get_date())
-    data_to_insert = [(str(username), date_joined, str(password), access_level)]
+    data_to_insert = [(str(username), date_joined, str(password), access_level, 0)]
     try:
         conn = sqlite3.connect('instance/var/db/users.db')
         c = conn.cursor()
@@ -115,4 +147,4 @@ def query_db():
 
 # create_db()  # Run create_db function first time to create the database
 # add_user('Lindsay', 'badPassword', 's')  # Add a user to the database (calling multiple times will add additional plants)
-query_db()  # View all data stored in the
+# query_db()  # View all data stored in the
