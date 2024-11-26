@@ -1,0 +1,24 @@
+{
+  "RECORDS": [
+    {"id": 1234,
+    "uname": "jshort",
+    "pw_hash": "something",
+    "created_at": "2024-07-08 11:48:22",
+    "last_login": "2024-09-01 10:02:15"},
+    {"id": 5678,
+    "uname": "dparsons",
+    "pw_hash": "something",
+    "created_at": "2024-07-08 11:48:22",
+    "last_login": "2024-09-01 10:02:15"},
+    {"id": 4321,
+    "uname": "lrees",
+    "pw_hash": "something",
+    "created_at": "2024-07-08 11:48:22",
+    "last_login": "2024-09-01 10:02:15"},
+    {"id": 7777,
+    "uname": "pwalker",
+    "pw_hash": "something",
+    "created_at": "2024-07-08 11:48:22",
+    "last_login": "2024-09-01 10:02:15"}
+  ]
+}

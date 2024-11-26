@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse"
+                                data-target="#collapseOne" aria-expanded="true"
+                                aria-controls="collapseOne">
+                            User Registration
+                        </button>
+                    </h5>
+                    <div id="collapseOne"
+                         class="collapse {% if not search_term %}show{% endif %}"
+                         aria-labelledby="headingOne" data-parent="#accordion">
+                        <p>Please enter your information</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col md-6">
+                <form action="{{ url_for('.register') }}" method="POST"
+                      id="login_form">
+                    <div class="form-group">
+                        <label for="username">Username:</label><input
+                            class="form-control" type="text" id="username"
+                            name="username" required><br/>
+                        <label for="password">Password:</label><input
+                            class="form-control" type='password' id="password"
+                            name="password" required>
+                        <button type="submit" class="btn btn-primary mt-4">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

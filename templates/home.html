@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div id="lesson-choices" class="card">
+    <div class="card-body">
+        <h5><em>Welcome to your portal:</em></h5>
+        <ul>
+            <li> <a href = "{{url_for('.login')}}"> Sign in </a></li>
+            <li><a href="{{url_for('.register')}}"> Register a new user </a></li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
