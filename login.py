@@ -79,6 +79,9 @@ def register():
 
         if check_exist(username):
             flash("Username already exists!", 'alert-info')
+        elif not password_strength(password):
+            flash("Password is too weak. Your password must have 8-25 characters and at least one of each of the "
+                  "following: lowercase, uppercase, number, special character (!@#$%^&*)", 'alert-info')
         else:
             add_user(username, password, 's')
             return redirect(url_for('login_success',
