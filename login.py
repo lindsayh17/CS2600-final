@@ -55,16 +55,22 @@ def transactions():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """Login the user. """
+    attempt_count = 0
 
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        attempt_count += 1
 
         if search_db(username, password):
             return redirect(url_for('login_success',
                                              id_=get_id(username)))
         else:
             flash("Invalid username or password!", 'alert-danger')
+            if attempt_count > 2:
+                return render_template('locked.html',
+                                       title="Secure Login",
+                                       heading="Secure Login")
     return render_template('login.html',
                            title="Secure Login",
                            heading="Secure Login")
@@ -96,5 +102,11 @@ def register():
 def login_success(id_):
     flash("Welcome! You have logged in!", 'alert-success')
     return render_template('customer_home.html',
+                           title="Customer Home",
+                           heading="Customer Home")
+
+@app.route("/locked", methods=['GET', 'POST'])
+def locked():
+    return render_template('locked.html',
                            title="Customer Home",
                            heading="Customer Home")
