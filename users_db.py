@@ -64,11 +64,11 @@ def get_options(user_id):
         user_info = c.execute('SELECT access_level FROM users WHERE user_id == ?', (user_id, )).fetchone()
 
         if user_info[0] == 's':
-            return ['Time Off', 'Pay', 'Rosters']
+            return [[0, 'Time Off'], [1, 'Pay'], [2, 'Rosters']]
         elif user_info[0] == 't':
-            return ['Time Off', 'Pay', 'Rosters', 'Grades']
+            return [[0, 'Time Off'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades']]
         elif user_info[0] == 'a':
-            return ['Time Report', 'Pay', 'Rosters', 'Grades', 'Time Off', 'Evals']
+            return [[0, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [4, 'Time Off'], [5, 'Evals']]
     except sqlite3.DatabaseError:
         return "Error. Could not retrieve user information."
     finally:
@@ -165,5 +165,5 @@ def query_db():
             conn.close()
 
 # create_db()  # Run create_db function first time to create the database
-add_user('Teacher', 'badPassword', 't')  # Add a user to the database (calling multiple times will add additional plants)
-query_db()  # View all data stored in the
+# add_user('Teacher', 'badPassword', 't')  # Add a user to the database (calling multiple times will add additional plants)
+# query_db()  # View all data stored in the
