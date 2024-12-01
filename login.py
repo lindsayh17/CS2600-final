@@ -123,11 +123,12 @@ def options(id_):
 @app.route("/option_page/<int:option_id>", methods=['GET', ])
 def option_page(option_id):
     flash("Welcome! You have logged in!", 'alert-success')
-
+    option_menu = [[4, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [0, 'Time Off'], [5, 'Evals']]
+    option = option_menu[option_id]
     return render_template('option_page.html',
                            title="Customer Home",
                            heading="Customer Home",
-                           choice=option_id)
+                           choice=option[1])
 
 @app.route("/locked", methods=['GET', 'POST'])
 def locked():

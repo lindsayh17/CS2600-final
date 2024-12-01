@@ -68,7 +68,7 @@ def get_options(user_id):
         elif user_info[0] == 't':
             return [[0, 'Time Off'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades']]
         elif user_info[0] == 'a':
-            return [[0, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [4, 'Time Off'], [5, 'Evals']]
+            return [[4, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [0, 'Time Off'], [5, 'Evals']]
     except sqlite3.DatabaseError:
         return "Error. Could not retrieve user information."
     finally:
