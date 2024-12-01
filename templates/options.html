@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead class="uvm-green">
+            <tr>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for option in option_menu %}
+            <tr>
+                <td>{{ option }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+{% endblock %}

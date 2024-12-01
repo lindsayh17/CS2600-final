@@ -57,6 +57,26 @@ def get_id(username):
         if conn is not None:
             conn.close()
 
+def get_options(user_id):
+    try:
+        conn = sqlite3.connect('instance/var/db/users.db')
+        c = conn.cursor()
+        user_info = c.execute('SELECT access_level FROM users WHERE user_id == ?', (user_id, )).fetchone()
+
+        if user_info[0] == 's':
+            return ['Time Off', 'Pay', 'Rosters']
+        elif user_info[0] == 't':
+            return ['Time Off', 'Pay', 'Rosters', 'Grades']
+        elif user_info[0] == 'a':
+            return ['Time Report', 'Pay', 'Rosters', 'Grades', 'Time Off', 'Evals']
+    except sqlite3.DatabaseError:
+        return "Error. Could not retrieve user information."
+    finally:
+        if c is not None:
+            c.close()
+        if conn is not None:
+            conn.close()
+
 def check_locked(username):
     try:
         conn = sqlite3.connect('instance/var/db/users.db')
@@ -92,7 +112,7 @@ def lock(username):
 def add_user(username, password, access_level):
     """ Example data insert into plants table """
     date_joined = str(get_date())
-    data_to_insert = [(str(username), date_joined, str(password), access_level, 0)]
+    data_to_insert = [(str(username), date_joined, str(password), access_level)]
     try:
         conn = sqlite3.connect('instance/var/db/users.db')
         c = conn.cursor()
@@ -144,7 +164,6 @@ def query_db():
         if conn is not None:
             conn.close()
 
-
 # create_db()  # Run create_db function first time to create the database
-# add_user('Lindsay', 'badPassword', 's')  # Add a user to the database (calling multiple times will add additional plants)
-# query_db()  # View all data stored in the
+add_user('Teacher', 'badPassword', 't')  # Add a user to the database (calling multiple times will add additional plants)
+query_db()  # View all data stored in the

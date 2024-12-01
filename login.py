@@ -17,7 +17,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect
 from db import Db
 from lessons import sql_injection
 from lessons.password_crack import hash_pw, authenticate
-from users_db import search_db, get_id, add_user, check_locked, lock
+from users_db import search_db, get_id, add_user, check_locked, lock, get_options
 from new_user import check_exist, password_strength
 
 app = Flask(__name__, static_folder='instance/static')
@@ -71,7 +71,7 @@ def login():
         attempt_count += 1
 
         if search_db(username, password):
-            return redirect(url_for('login_success',
+            return redirect(url_for('options',
                                              id_=get_id(username)))
         else:
             flash("Invalid username or password!" + str(attempt_count), 'alert-danger')
@@ -110,6 +110,15 @@ def login_success(id_):
     return render_template('customer_home.html',
                            title="Customer Home",
                            heading="Customer Home")
+
+@app.route("/options/<int:id_>", methods=['GET', ])
+def options(id_):
+    flash("Welcome! You have logged in!", 'alert-success')
+
+    return render_template('options.html',
+                           title="Customer Home",
+                           heading="Customer Home",
+                           option_menu=get_options(id_))
 
 @app.route("/locked", methods=['GET', 'POST'])
 def locked():
