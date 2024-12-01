@@ -12,7 +12,7 @@
             <tbody>
             {% for option in option_menu %}
             <tr>
-                <td>{{ option }}</td>
+                <a href="{{url_for('.option_page', option_id=option)}}"><td>{{ option }}</td></a>
             </tr>
             {% endfor %}
             </tbody>
