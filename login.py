@@ -34,24 +34,24 @@ def home():
                            show=display)
 
 
-@app.route("/transactions", methods=['GET', 'POST'])
-def transactions():
-    """ Transaction injection attack """
-    search_term = ''
-    if request.method == 'POST':
-        search_term = request.form.get('search_term')
-        q = sql_injection.create_search_query(1234, search_term)
-    else:
-        q = 'SELECT * FROM trnsaction WHERE trnsaction.account_id = 1234'
-    cnx = Db.get_connection()
-    c = Db.execute_query(cnx, q)
-    rows = c.fetchall()
-    return render_template('transactions.html',
-                           search_term=search_term,
-                           rows=rows,
-                           query=q,
-                           title="My Transactions",
-                           heading="My Transactions")
+# @app.route("/transactions", methods=['GET', 'POST'])
+# def transactions():
+#     """ Transaction injection attack """
+#     search_term = ''
+#     if request.method == 'POST':
+#         search_term = request.form.get('search_term')
+#         q = sql_injection.create_search_query(1234, search_term)
+#     else:
+#         q = 'SELECT * FROM trnsaction WHERE trnsaction.account_id = 1234'
+#     cnx = Db.get_connection()
+#     c = Db.execute_query(cnx, q)
+#     rows = c.fetchall()
+#     return render_template('transactions.html',
+#                            search_term=search_term,
+#                            rows=rows,
+#                            query=q,
+#                            title="My Transactions",
+#                            heading="My Transactions")
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -104,12 +104,12 @@ def register():
                            heading="Secure Registration")
 
 
-@app.route("/login_success/<int:id_>", methods=['GET', ])
-def login_success(id_):
-    flash("Welcome! You have logged in!", 'alert-success')
-    return render_template('customer_home.html',
-                           title="Customer Home",
-                           heading="Customer Home")
+# @app.route("/login_success/<int:id_>", methods=['GET', ])
+# def login_success(id_):
+#     flash("Welcome! You have logged in!", 'alert-success')
+#     return render_template('customer_home.html',
+#                            title="Customer Home",
+#                            heading="Customer Home")
 
 @app.route("/options/<int:id_>", methods=['GET', ])
 def options(id_):
@@ -126,12 +126,12 @@ def option_page(option_id):
     option_menu = [[4, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [0, 'Time Off'], [5, 'Evals']]
     option = option_menu[option_id]
     return render_template('option_page.html',
-                           title="Customer Home",
-                           heading="Customer Home",
+                           title=option[1],
+                           heading=option[1],
                            choice=option[1])
 
 @app.route("/locked", methods=['GET', 'POST'])
 def locked():
     return render_template('locked.html',
-                           title="Customer Home",
-                           heading="Customer Home")
+                           title="Account Locked",
+                           heading="Account Locked")
