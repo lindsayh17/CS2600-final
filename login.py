@@ -15,6 +15,7 @@ from tabnanny import check
 from config import display
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from db import Db
+from password_generator import generate_password
 from users_db import search_db, get_id, add_user, check_locked, lock, get_options, get_password
 from new_user import check_exist, password_strength
 from password_hash import hash_pw, authenticate
@@ -119,7 +120,8 @@ def register():
         # flash("Invalid username or password!", 'alert-danger')
     return render_template('register.html',
                            title="Secure Registration",
-                           heading="Secure Registration")
+                           heading="Secure Registration",
+                           generated_password=generate_password())
 
 
 # @app.route("/login_success/<int:id_>", methods=['GET', ])
