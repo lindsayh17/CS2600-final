@@ -105,8 +105,9 @@ def register():
             flash("Password is too weak. Your password must have 8-25 characters and at least one of each of the "
                   "following: lowercase, uppercase, number, special character (!@#$%^&*)", 'alert-info')
         else:
-            add_user(username, password, 's')
-            return redirect(url_for('login_success',
+            hashed_password = hash_pw(password)
+            add_user(username, hashed_password, 's')
+            return redirect(url_for('options',
                                              id_=get_id(username)))
         # flash("Invalid username or password!", 'alert-danger')
     return render_template('register.html',
