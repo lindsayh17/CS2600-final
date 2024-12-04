@@ -65,6 +65,8 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         pw_hash = get_password(username)
+
+        # check to see if account is already locked
         if check_locked(username) == True:
             return render_template('locked.html',
                                    title="Secure Login",
@@ -78,12 +80,16 @@ def login():
             else:
                 session['attempts'] += 1
 
+                # lock account after 3 attempts
                 if session['attempts'] > 2:
                     lock(username)
-                    flash("Your account has been locked." + str(check_locked(username)), 'alert-danger')
+                    flash("Your account has been locked.", 'alert-danger')
                     session['attempts'] = 0
+                    return render_template('locked.html',
+                                           title="Secure Login",
+                                           heading="Secure Login")
                 else:
-                    flash("Invalid username or password!" + str(check_locked(username)),
+                    flash("Invalid username or password!",
                           'alert-danger')
         except KeyError:
             pass
