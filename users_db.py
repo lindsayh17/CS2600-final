@@ -65,7 +65,7 @@ def get_password(username):
         if user_info:
             return user_info[0]
         else:
-            return False
+            return ''
     except sqlite3.DatabaseError:
         return "Error. Could not retrieve user information."
     finally:
@@ -100,7 +100,7 @@ def check_locked(username):
         c = conn.cursor()
         user_info = c.execute('SELECT locked FROM users WHERE username == ?', (username, )).fetchone()
         if user_info:
-            return user_info[0]
+            return user_info[0] == 1
         else:
             return False
     except sqlite3.DatabaseError:
@@ -115,7 +115,7 @@ def lock(username):
     try:
         conn = sqlite3.connect('instance/var/db/users.db')
         c = conn.cursor()
-        c.executemany('UPDATE users SET locked = TRUE WHERE username == ?', (username, ))
+        c.execute('UPDATE users SET locked = TRUE WHERE username == ?', (username, ))
         conn.commit()
         return True
     except sqlite3.DatabaseError:
@@ -129,14 +129,14 @@ def lock(username):
 def add_user(username, password, access_level):
     """ Example data insert into plants table """
     date_joined = str(get_date())
-    data_to_insert = [(str(username), date_joined, str(password), access_level)]
+    data_to_insert = [(str(username), date_joined, str(password), access_level, False)]
     try:
         conn = sqlite3.connect('instance/var/db/users.db')
         c = conn.cursor()
         if get_id(username):
             return False
-        c.executemany("INSERT INTO users (username, date_joined, password, access_level) "
-                      "VALUES (?, ?, ?, ?)", data_to_insert)
+        c.executemany("INSERT INTO users (username, date_joined, password_hash, access_level, locked) "
+                      "VALUES (?, ?, ?, ?, ?)", data_to_insert)
         conn.commit()
         return True
     except sqlite3.IntegrityError:
@@ -183,4 +183,4 @@ def query_db():
 
 # create_db()  # Run create_db function first time to create the database
 # add_user('Teacher', 'badPassword', 't')  # Add a user to the database (calling multiple times will add additional plants)
-# query_db()  # View all data stored in the
+query_db()  # View all data stored in the

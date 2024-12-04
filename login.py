@@ -13,7 +13,7 @@ import csv
 from tabnanny import check
 
 from config import display
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect, session
 from db import Db
 from lessons import sql_injection
 from users_db import search_db, get_id, add_user, check_locked, lock, get_options, get_password
@@ -56,8 +56,11 @@ def home():
 
 
 @app.route("/login", methods=['GET', 'POST'])
-def login(attempts=3):
+def login():
     """Login the user. """
+    if "attempts" not in session:
+        session['attempts'] = 0
+
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
@@ -69,20 +72,24 @@ def login(attempts=3):
         try:
             # pass in 80 because 1 byte = 2 hex values
             if authenticate(pw_hash, password, 80):
+                session['attempts'] = 0
                 return redirect(url_for('options',
                                         id_=get_id(username)))
             else:
-                attempts += 1
+                session['attempts'] += 1
 
-                flash("Invalid username or password!" + str(attempts), 'alert-danger')
-                if attempts > 2:
+                if session['attempts'] > 2:
                     lock(username)
+                    flash("Your account has been locked." + str(check_locked(username)), 'alert-danger')
+                    session['attempts'] = 0
+                else:
+                    flash("Invalid username or password!" + str(check_locked(username)),
+                          'alert-danger')
         except KeyError:
             pass
     return render_template('login.html',
                            title="Secure Login",
-                           heading="Secure Login",
-                           attempts=attempts)
+                           heading="Secure Login")
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():

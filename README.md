@@ -60,3 +60,4 @@ Steps:
 
 ## Source
 Sqlite: https://docs.python.org/3/library/sqlite3.html
+Sessions: https://flask.palletsprojects.com/en/stable/quickstart/#sessions
