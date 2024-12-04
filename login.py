@@ -16,9 +16,10 @@ from config import display
 from flask import Flask, render_template, request, url_for, flash, redirect
 from db import Db
 from lessons import sql_injection
-from lessons.password_crack import hash_pw, authenticate
-from users_db import search_db, get_id, add_user, check_locked, lock, get_options
+from users_db import search_db, get_id, add_user, check_locked, lock, get_options, get_password
 from new_user import check_exist, password_strength
+from password_hash import hash_pw, authenticate
+
 
 app = Flask(__name__, static_folder='instance/static')
 
@@ -55,31 +56,33 @@ def home():
 
 
 @app.route("/login", methods=['GET', 'POST'])
-def login():
+def login(attempts=3):
     """Login the user. """
-    """ TODO: fix attempt counts"""
-    attempt_count = 0
-
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        pw_hash = get_password(username)
         if check_locked(username) == True:
             return render_template('locked.html',
                                    title="Secure Login",
                                    heading="Secure Login")
+        try:
+            # pass in 80 because 1 byte = 2 hex values
+            if authenticate(pw_hash, password, 80):
+                return redirect(url_for('options',
+                                        id_=get_id(username)))
+            else:
+                attempts += 1
 
-        attempt_count += 1
-
-        if search_db(username, password):
-            return redirect(url_for('options',
-                                             id_=get_id(username)))
-        else:
-            flash("Invalid username or password!" + str(attempt_count), 'alert-danger')
-            if attempt_count > 2:
-                lock(username)
+                flash("Invalid username or password!" + str(attempts), 'alert-danger')
+                if attempts > 2:
+                    lock(username)
+        except KeyError:
+            pass
     return render_template('login.html',
                            title="Secure Login",
-                           heading="Secure Login")
+                           heading="Secure Login",
+                           attempts=attempts)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():

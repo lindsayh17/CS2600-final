@@ -20,9 +20,9 @@ def create_db():
                     user_id INTEGER PRIMARY KEY,
                     username text,
                     date_joined text,
-                    password text,
+                    password_hash text,
                     access_level character,
-                    attempts int
+                    locked boolean
                     )''')
         conn.commit()
         return True
@@ -45,6 +45,23 @@ def get_id(username):
         conn = sqlite3.connect('instance/var/db/users.db')
         c = conn.cursor()
         user_info = c.execute('SELECT user_id FROM users WHERE username == ?', (username, )).fetchone()
+        if user_info:
+            return user_info[0]
+        else:
+            return False
+    except sqlite3.DatabaseError:
+        return "Error. Could not retrieve user information."
+    finally:
+        if c is not None:
+            c.close()
+        if conn is not None:
+            conn.close()
+
+def get_password(username):
+    try:
+        conn = sqlite3.connect('instance/var/db/users.db')
+        c = conn.cursor()
+        user_info = c.execute('SELECT password_hash FROM users WHERE username == ?', (username, )).fetchone()
         if user_info:
             return user_info[0]
         else:
