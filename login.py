@@ -15,7 +15,6 @@ from tabnanny import check
 from config import display
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from db import Db
-from lessons import sql_injection
 from users_db import search_db, get_id, add_user, check_locked, lock, get_options, get_password
 from new_user import check_exist, password_strength
 from password_hash import hash_pw, authenticate
