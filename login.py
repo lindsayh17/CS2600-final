@@ -20,10 +20,12 @@ from users_db import search_db, get_id, add_user, check_locked, lock, get_option
 from new_user import check_exist, password_strength
 from password_hash import hash_pw, authenticate
 
-
 app = Flask(__name__, static_folder='instance/static')
 
 app.config.from_object('config')
+
+# secret token created with: import secrets; print(secrets.token_hex())
+app.secret_key = '9f42ca5014874c7b910ad2706e074e573d1f59dff77f72c385cef1fd67bf7257'
 
 
 @app.route("/", methods=['GET', 'POST'])
