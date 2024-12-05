@@ -126,8 +126,8 @@ def options(id_):
     flash("Welcome! You have logged in!", 'alert-success')
 
     return render_template('options.html',
-                           title="Customer Home",
-                           heading="Customer Home",
+                           title="Main Menu",
+                           heading="Main Menu",
                            option_menu=get_options(id_))
 
 @app.route("/option_page/<int:option_id>", methods=['GET', ])
