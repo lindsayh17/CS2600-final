@@ -9,12 +9,9 @@ training purposes only!
 """
 
 
-import csv
-from tabnanny import check
 
 from config import display
 from flask import Flask, render_template, request, url_for, flash, redirect, session
-from db import Db
 from password_generator import generate_password
 from users_db import search_db, get_id, add_user, check_locked, lock, get_options, get_password
 from new_user import check_exist, password_strength
@@ -30,42 +27,26 @@ app.secret_key = '9f42ca5014874c7b910ad2706e074e573d1f59dff77f72c385cef1fd67bf72
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
-    """ Bank home page """
+    """ School portal home page """
     return render_template('home.html',
-                           title="Home Page",
-                           heading="Home Page",
+                           title="Home",
+                           heading="Home",
                            show=display)
-
-
-# @app.route("/transactions", methods=['GET', 'POST'])
-# def transactions():
-#     """ Transaction injection attack """
-#     search_term = ''
-#     if request.method == 'POST':
-#         search_term = request.form.get('search_term')
-#         q = sql_injection.create_search_query(1234, search_term)
-#     else:
-#         q = 'SELECT * FROM trnsaction WHERE trnsaction.account_id = 1234'
-#     cnx = Db.get_connection()
-#     c = Db.execute_query(cnx, q)
-#     rows = c.fetchall()
-#     return render_template('transactions.html',
-#                            search_term=search_term,
-#                            rows=rows,
-#                            query=q,
-#                            title="My Transactions",
-#                            heading="My Transactions")
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     """Login the user. """
+    # initialize attempts to 0
     if "attempts" not in session:
         session['attempts'] = 0
 
     if request.method == 'POST':
+        # get username and password
         username = request.form.get('username')
         password = request.form.get('password')
+
+        # get password hash from database
         pw_hash = get_password(username)
 
         # check to see if account is already locked
@@ -122,14 +103,6 @@ def register():
                            title="Secure Registration",
                            heading="Secure Registration",
                            generated_password=generate_password())
-
-
-# @app.route("/login_success/<int:id_>", methods=['GET', ])
-# def login_success(id_):
-#     flash("Welcome! You have logged in!", 'alert-success')
-#     return render_template('customer_home.html',
-#                            title="Customer Home",
-#                            heading="Customer Home")
 
 @app.route("/options/<int:id_>", methods=['GET', ])
 def options(id_):
