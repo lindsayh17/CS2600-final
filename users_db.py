@@ -167,7 +167,9 @@ def add_user(username, password, access_level):
         conn.commit()
         return True
     except sqlite3.IntegrityError:
-        return False
+        return "Error. Could not create new user."
+    except sqlite3.OperationalError:
+        return "Error. Could not create new user."
     finally:
         if c is not None:
             c.close()

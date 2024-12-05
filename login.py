@@ -13,7 +13,7 @@ training purposes only!
 from config import display
 from flask import Flask, render_template, request, url_for, flash, redirect, session
 from password_generator import generate_password
-from users_db import search_db, get_id, add_user, check_locked, lock, get_options, get_password
+from users_db import get_id, add_user, check_locked, lock, get_options, get_password
 from new_user import check_exist, password_strength
 from password_hash import hash_pw, authenticate
 
@@ -49,9 +49,15 @@ def login():
         # get password hash from database
         pw_hash = get_password(username)
 
+        lock_status = check_locked(get_id(username))
         # check to see if account is already locked
-        if check_locked(username) == True:
+        if lock_status == True:
             return render_template('locked.html',
+                                   title="Secure Login",
+                                   heading="Secure Login")
+        elif lock_status != False:
+            flash(lock_status, 'alert-danger')
+            return render_template('error.html',
                                    title="Secure Login",
                                    heading="Secure Login")
         try:
@@ -65,12 +71,14 @@ def login():
 
                 # lock account after 3 attempts
                 if session['attempts'] > 2:
-                    lock(username)
-                    flash("Your account has been locked.", 'alert-danger')
-                    session['attempts'] = 0
-                    return render_template('locked.html',
-                                           title="Secure Login",
-                                           heading="Secure Login")
+                    lock_success = lock(username)
+                    if lock_success == True:
+                        flash("Your account has been locked.", 'alert-danger')
+                        session['attempts'] = 0
+                        return redirect(url_for('locked'))
+                    elif lock_success != False:
+                        flash(lock_success, 'alert-danger')
+                        return redirect(url_for('error'))
                 else:
                     flash("Invalid username or password!",
                           'alert-danger')
@@ -95,14 +103,16 @@ def register():
                   "following: lowercase, uppercase, number, special character (!@#$%^&*)", 'alert-info')
         else:
             hashed_password = hash_pw(password)
-            add_user(username, hashed_password, 's')
-            return redirect(url_for('options',
+            add_success = add_user(username, hashed_password, 's')
+            if add_success == True:
+                return redirect(url_for('options',
                                              id_=get_id(username)))
-        # flash("Invalid username or password!", 'alert-danger')
+            else:
+                return redirect(url_for('error'))
     return render_template('register.html',
-                           title="Secure Registration",
-                           heading="Secure Registration",
-                           generated_password=generate_password())
+        title="Secure Registration",
+        heading="Secure Registration",
+        generated_password=generate_password())
 
 @app.route("/options/<int:id_>", methods=['GET', ])
 def options(id_):
@@ -128,3 +138,9 @@ def locked():
     return render_template('locked.html',
                            title="Account Locked",
                            heading="Account Locked")
+
+@app.route("/error", methods=['GET', 'POST'])
+def error():
+    return render_template('error.html',
+                           title="Error",
+                           heading="Error")
