@@ -46,6 +46,14 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        # ensure user input does not contain double quotes
+        index = username.find("\"")
+        if index != -1:
+            return redirect(url_for('error'))
+        index = password.find("\"")
+        if index != -1:
+            return redirect(url_for('error'))
+
         # get password hash from database
         pw_hash = get_password(username)
 
@@ -98,6 +106,14 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+
+        # ensure user input does not contain double quotes
+        index = username.find("\"")
+        if index != -1:
+            return redirect(url_for('error'))
+        index = password.find("\"")
+        if index != -1:
+            return redirect(url_for('error'))
 
         # tell user if chosen username already exists
         if check_exist(username):
