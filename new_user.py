@@ -6,6 +6,11 @@ PASSWORD_MIN_LENGTH = 8
 PASSWORD_MAX_LENGTH = 50
 
 def check_exist(username) -> bool:
+    """
+    Checks to see if a username already exists.
+    :param username: str the username being searched for
+    :return: bool true if it exists in the database, false otherwise
+    """
     if get_id(username):
         return True
     else:
