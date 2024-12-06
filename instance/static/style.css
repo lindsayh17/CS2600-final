@@ -1,7 +1,7 @@
 #masthead {
-    background-color: #66AC47;
+    background-color: #8A95A5;
     padding: 20px;
-    border-bottom: #485f6e 1px solid;
+    border-bottom: #8A95A5 1px solid;
     width: 100%;
 }
 
@@ -25,7 +25,7 @@ footer {
     margin-top: 4em;
     padding: 2em 20px 8em;
     width: 100%;
-    background-color: #007155;
+    background-color: #474056;
     color: #eee;
     font-family: serif;
 }
@@ -35,7 +35,7 @@ footer {
 }
 
 .uvm-green {
-    background-color: #007155;
+    background-color: #757083;
     color: white;
 }
 
