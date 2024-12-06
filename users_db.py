@@ -92,11 +92,11 @@ def get_options(user_id):
         user_info = c.execute('SELECT access_level FROM users WHERE user_id == ?', (user_id, )).fetchone()
 
         if user_info[0] == 's':
-            return [[0, 'Time Off'], [1, 'Pay'], [2, 'Rosters']]
+            return [[0, 'Time Report'], [1, 'Pay'], [2, 'Rosters']]
         elif user_info[0] == 't':
-            return [[0, 'Time Off'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades']]
+            return [[4, 'Time Off'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades']]
         elif user_info[0] == 'a':
-            return [[4, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [0, 'Time Off'], [5, 'Evals']]
+            return [[0, 'Time Report'], [1, 'Pay'], [2, 'Rosters'], [3, 'Grades'], [4, 'Time Off'], [5, 'Evals']]
     except sqlite3.DatabaseError:
         return "Error. Could not retrieve user information."
     finally:
