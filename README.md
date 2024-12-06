@@ -73,7 +73,7 @@ Random Numbers: https://www.geeksforgeeks.org/random-numbers-in-python/
                 https://www.w3schools.com/python/ref_random_randint.asp  
 Catamount Community Bank starter code - Professor Jim Eddy  
 SQL Injection Protection from Lab 4.0  
-Salting and Hashing from Lab 6.0    
+Salting and Hashing from Lab 6.0  
 Lab 1.0 System  
 Password Validation Lab 2.0  
 Password Hash: https://www.geeksforgeeks.org/how-to-convert-bytes-to-string-in-python/  
