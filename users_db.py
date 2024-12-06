@@ -195,5 +195,7 @@ def query_db():
             conn.close()
 
 # create_db()  # Run create_db function first time to create the database
-# add_user('Teacher', '#1Admin!', 'a')  # Add a user to the database
+# add_user('Admin', '#1Admin!', 'a')  # Add a user to the database
+# add_user('Teacher', '#1Teacher!', 't')
+# add_user('Substitute', '#1Substitute!', 's')
 # query_db()  # View all data stored in the
