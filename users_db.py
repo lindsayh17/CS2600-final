@@ -199,4 +199,4 @@ def query_db():
 # add_user('Admin', hash_pw('#1Admin!'), 'a')  # Add a user to the database
 # add_user('Teacher', hash_pw('#1Teacher!'), 't')
 # add_user('Substitute', hash_pw('#1Substitute!'), 's')
-query_db()  # View all data stored in the
+# query_db()  # View all data stored in the
