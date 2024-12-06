@@ -10,6 +10,7 @@ level, and an account lock flag.
 """
 import sqlite3
 from datetime import datetime
+from password_hash import hash_pw
 
 
 def create_db():
@@ -195,7 +196,7 @@ def query_db():
             conn.close()
 
 # create_db()  # Run create_db function first time to create the database
-# add_user('Admin', '#1Admin!', 'a')  # Add a user to the database
-# add_user('Teacher', '#1Teacher!', 't')
-# add_user('Substitute', '#1Substitute!', 's')
-# query_db()  # View all data stored in the
+# add_user('Admin', hash_pw('#1Admin!'), 'a')  # Add a user to the database
+# add_user('Teacher', hash_pw('#1Teacher!'), 't')
+# add_user('Substitute', hash_pw('#1Substitute!'), 's')
+query_db()  # View all data stored in the
