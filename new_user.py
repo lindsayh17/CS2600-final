@@ -1,3 +1,9 @@
+"""
+Ensure a new user's username and password are valid.
+Username should not already exist. Password must satisfy length and
+character requirements.
+"""
+
 from users_db import get_id
 
 # Special characters to test password strength
